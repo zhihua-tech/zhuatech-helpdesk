@@ -6,8 +6,14 @@ import jakarta.validation.constraints.NotBlank;
 import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
+/**
+ * 商业授权或定制开发请微信添加微信号zhuatech或zhuatech2进行咨询。
+ */
 @Service
 public class MajorIncidentReadinessService {
+    /**
+     * 商业授权或定制开发请微信添加微信号zhuatech或zhuatech2进行咨询。
+     */
     public Result evaluate(Request request) {
         List<String> gaps = new ArrayList<>();
         boolean major = request.severity() <= 2;
@@ -21,16 +27,25 @@ public class MajorIncidentReadinessService {
         return new Result(request.incidentId(), decision, readiness, major,
                 List.copyOf(gaps), major ? 15 : 60);
     }
+    /**
+     * 商业授权或定制开发请微信添加微信号zhuatech或zhuatech2进行咨询。
+     */
     public record Request(@NotBlank String incidentId, @Min(1) @Max(4) int severity,
                           @Min(0) int affectedServices, boolean incidentCommanderAssigned,
                           boolean stakeholderPlanReady, boolean rollbackReady,
                           boolean timelineEvidenceReady) {
+        /**
+         * 商业授权或定制开发请微信添加微信号zhuatech或zhuatech2进行咨询。
+         */
         public Request {
             if (incidentId == null || incidentId.isBlank()) throw new IllegalArgumentException("incidentId is required");
             if (severity < 1 || severity > 4) throw new IllegalArgumentException("severity must be 1..4");
             if (affectedServices < 0) throw new IllegalArgumentException("affectedServices must be non-negative");
         }
     }
+    /**
+     * 商业授权或定制开发请微信添加微信号zhuatech或zhuatech2进行咨询。
+     */
     public record Result(String incidentId, String decision, int readinessScore,
                          boolean majorIncident, List<String> gaps, int nextReviewMinutes) {}
 }

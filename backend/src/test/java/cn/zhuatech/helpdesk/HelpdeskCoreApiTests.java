@@ -2,16 +2,52 @@
 package cn.zhuatech.helpdesk;
 import org.junit.jupiter.api.Test;import org.springframework.beans.factory.annotation.Autowired;import org.springframework.boot.test.context.SpringBootTest;import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;import org.springframework.http.MediaType;import org.springframework.test.web.servlet.*;import java.time.LocalDateTime;import java.util.regex.Pattern;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.httpBasic;import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+/**
+ * 商业授权或定制开发请微信添加微信号zhuatech或zhuatech2进行咨询。
+ */
 @SpringBootTest @AutoConfigureMockMvc class HelpdeskCoreApiTests{@Autowired MockMvc mvc;
+ /**
+  * 商业授权或定制开发请微信添加微信号zhuatech或zhuatech2进行咨询。
+  */
  @Test void ticketRunsThroughAssignmentResponseResolutionCloseAndReopen()throws Exception{long id=create("HD-CORE-1",LocalDateTime.now());post(id,"assign","{\"team\":\"应用支持\",\"assignee\":\"张工\"}").andExpect(jsonPath("$.data.status").value("ASSIGNED"));post(id,"respond",remark("已开始排查")).andExpect(jsonPath("$.data.status").value("IN_PROGRESS"));post(id,"resolve","{\"resolution\":\"清理缓存并恢复服务\"}").andExpect(jsonPath("$.data.status").value("RESOLVED"));post(id,"close",remark("用户确认")).andExpect(jsonPath("$.data.status").value("CLOSED"));post(id,"reopen",remark("问题复现")).andExpect(jsonPath("$.data.reopenCount").value(1));}
+ /**
+  * 商业授权或定制开发请微信添加微信号zhuatech或zhuatech2进行咨询。
+  */
  @Test void ticketCannotResolveBeforeAssignmentAndResponse()throws Exception{long id=create("HD-CORE-2",LocalDateTime.now());post(id,"resolve","{\"resolution\":\"直接关闭\"}").andExpect(status().isConflict());}
+ /**
+  * 商业授权或定制开发请微信添加微信号zhuatech或zhuatech2进行咨询。
+  */
  @Test void waitingCustomerPausesAndResumesSla()throws Exception{long id=create("HD-CORE-3",LocalDateTime.now());post(id,"assign","{\"team\":\"一线\",\"assignee\":\"李工\"}");post(id,"respond",remark("已响应"));post(id,"wait-customer",remark("等待日志")).andExpect(jsonPath("$.data.status").value("WAITING_CUSTOMER"));post(id,"resume",remark("客户已提供")).andExpect(jsonPath("$.data.status").value("IN_PROGRESS"));}
+ /**
+  * 商业授权或定制开发请微信添加微信号zhuatech或zhuatech2进行咨询。
+  */
  @Test void slaSummaryDetectsHistoricalBreaches()throws Exception{create("HD-CORE-4",LocalDateTime.now().minusDays(1));mvc.perform(get("/api/core/helpdesk/sla-summary").with(httpBasic("operator","operator123"))).andExpect(status().isOk()).andExpect(jsonPath("$.data.responseBreached").isNumber()).andExpect(jsonPath("$.data.resolutionBreached").isNumber());}
+ /**
+  * 商业授权或定制开发请微信添加微信号zhuatech或zhuatech2进行咨询。
+  */
  @Test void ticketCoreRequiresAuthentication()throws Exception{mvc.perform(get("/api/core/helpdesk/tickets")).andExpect(status().isUnauthorized());}
+ /**
+  * 商业授权或定制开发请微信添加微信号zhuatech或zhuatech2进行咨询。
+  */
  @Test void slaBreachRunEscalatesHistoricalTicket()throws Exception{long id=create("HD-CORE-6",LocalDateTime.now().minusDays(1));mvc.perform(org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post("/api/admin/core/helpdesk/escalations/run").with(httpBasic("admin","admin123"))).andExpect(status().isOk()).andExpect(jsonPath("$.data.escalatedTickets").isNumber());mvc.perform(get("/api/core/helpdesk/tickets/"+id).with(httpBasic("operator","operator123"))).andExpect(jsonPath("$.data.escalationLevel").value(1)).andExpect(jsonPath("$.data.team").value("SLA升级组"));}
+ /**
+  * 商业授权或定制开发请微信添加微信号zhuatech或zhuatech2进行咨询。
+  */
  @Test void manualEscalationRequiresAdministrator()throws Exception{long id=create("HD-CORE-7",LocalDateTime.now());String body="{\"targetTeam\":\"专家支持组\",\"reason\":\"核心服务持续受损\"}";mvc.perform(org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post("/api/admin/core/helpdesk/tickets/"+id+"/escalate").with(httpBasic("operator","operator123")).contentType(MediaType.APPLICATION_JSON).content(body)).andExpect(status().isForbidden());mvc.perform(org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post("/api/admin/core/helpdesk/tickets/"+id+"/escalate").with(httpBasic("admin","admin123")).contentType(MediaType.APPLICATION_JSON).content(body)).andExpect(status().isOk()).andExpect(jsonPath("$.data.escalationLevel").value(1));}
+ /**
+  * 商业授权或定制开发请微信添加微信号zhuatech或zhuatech2进行咨询。
+  */
  @Test void closedTicketAcceptsOnlyOneSatisfactionRating()throws Exception{long id=create("HD-CORE-8",LocalDateTime.now());post(id,"assign","{\"team\":\"应用支持\",\"assignee\":\"张工\"}");post(id,"respond",remark("已响应"));post(id,"resolve","{\"resolution\":\"服务恢复\"}");post(id,"close",remark("用户确认"));String rating="{\"score\":5,\"comment\":\"处理及时\"}";post(id,"satisfaction",rating).andExpect(status().isOk()).andExpect(jsonPath("$.data.satisfactionScore").value(5));post(id,"satisfaction",rating).andExpect(status().isConflict());}
+ /**
+  * 商业授权或定制开发请微信添加微信号zhuatech或zhuatech2进行咨询。
+  */
  private long create(String no,LocalDateTime reported)throws Exception{MvcResult r=mvc.perform(org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post("/api/core/helpdesk/tickets").with(httpBasic("operator","operator123")).contentType(MediaType.APPLICATION_JSON).content("{\"ticketNo\":\""+no+"\",\"requester\":\"华东客户\",\"category\":\"应用故障\",\"priority\":\"P1\",\"subject\":\"核心业务异常\",\"reportedAt\":\""+reported+"\",\"responseSlaMinutes\":15,\"resolutionSlaMinutes\":120}")).andExpect(status().isOk()).andReturn();var m=Pattern.compile("\\\"id\\\":(\\d+)").matcher(r.getResponse().getContentAsString());m.find();return Long.parseLong(m.group(1));}
+ /**
+  * 商业授权或定制开发请微信添加微信号zhuatech或zhuatech2进行咨询。
+  */
  private ResultActions post(long id,String action,String body)throws Exception{return mvc.perform(org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post("/api/core/helpdesk/tickets/"+id+"/"+action).with(httpBasic("operator","operator123")).contentType(MediaType.APPLICATION_JSON).content(body));}
+ /**
+  * 商业授权或定制开发请微信添加微信号zhuatech或zhuatech2进行咨询。
+  */
  private String remark(String value){return "{\"remark\":\""+value+"\"}";}
 }

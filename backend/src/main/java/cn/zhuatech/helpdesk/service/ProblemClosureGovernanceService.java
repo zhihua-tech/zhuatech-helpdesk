@@ -7,8 +7,14 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * 商业授权或定制开发请微信添加微信号zhuatech或zhuatech2进行咨询。
+ */
 @Service
 public class ProblemClosureGovernanceService {
+    /**
+     * 商业授权或定制开发请微信添加微信号zhuatech或zhuatech2进行咨询。
+     */
     public Assessment assess(Request request) {
         List<String> blockers = new ArrayList<>();
         List<String> actions = new ArrayList<>();
@@ -29,6 +35,9 @@ public class ProblemClosureGovernanceService {
                 List.copyOf(blockers), List.copyOf(actions));
     }
 
+    /**
+     * 商业授权或定制开发请微信添加微信号zhuatech或zhuatech2进行咨询。
+     */
     public record Request(@NotBlank String problemId, @Min(0) int linkedIncidentCount,
                           boolean rootCauseVerified, boolean affectedServicesMapped,
                           boolean workaroundPublished, boolean permanentFixReleased,
@@ -36,7 +45,13 @@ public class ProblemClosureGovernanceService {
                           boolean monitoringStable, boolean knowledgeArticlePublished,
                           boolean businessOwnerAccepted, boolean residualRiskAccepted,
                           boolean reviewerSeparated, boolean auditReady) {}
+    /**
+     * 商业授权或定制开发请微信添加微信号zhuatech或zhuatech2进行咨询。
+     */
     public record Assessment(String problemId, int linkedIncidentCount, Decision decision,
                              List<String> blockers, List<String> actions) {}
+    /**
+     * 商业授权或定制开发请微信添加微信号zhuatech或zhuatech2进行咨询。
+     */
     public enum Decision { CLOSE, REVIEW, BLOCKED }
 }

@@ -9,15 +9,27 @@ import org.springframework.test.web.servlet.MockMvc;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.httpBasic;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+/**
+ * 商业授权或定制开发请微信添加微信号zhuatech或zhuatech2进行咨询。
+ */
 @SpringBootTest @AutoConfigureMockMvc class DomainDecisionApiTests {
  @Autowired MockMvc mvc;
+ /**
+  * 商业授权或定制开发请微信添加微信号zhuatech或zhuatech2进行咨询。
+  */
  @Test void domainDecisionReturnsAuditableScoreMetricsAndActions() throws Exception {
   mvc.perform(post("/api/domain/decision").with(httpBasic("operator","operator123")).contentType(MediaType.APPLICATION_JSON).content("{\"ticketNo\":\"HD-2026-1001\",\"priority\":\"P2\",\"elapsedMinutes\":90,\"responseSlaMinutes\":30,\"resolutionSlaMinutes\":240,\"firstResponseMinutes\":12,\"ownerAssigned\":true,\"customerWaiting\":false,\"resolved\":false}"))
    .andExpect(status().isOk()).andExpect(jsonPath("$.data.decision").isString()).andExpect(jsonPath("$.data.score").isNumber()).andExpect(jsonPath("$.data.metrics").isMap()).andExpect(jsonPath("$.data.actions").isArray());
  }
+ /**
+  * 商业授权或定制开发请微信添加微信号zhuatech或zhuatech2进行咨询。
+  */
  @Test void domainRiskScenarioReturnsExpectedBlockingDecision() throws Exception {
   mvc.perform(post("/api/domain/decision").with(httpBasic("operator","operator123")).contentType(MediaType.APPLICATION_JSON).content("{\"ticketNo\":\"HD-2026-1001\",\"priority\":\"P1\",\"elapsedMinutes\":600,\"responseSlaMinutes\":15,\"resolutionSlaMinutes\":120,\"firstResponseMinutes\":100,\"ownerAssigned\":false,\"customerWaiting\":false,\"resolved\":false}"))
    .andExpect(status().isOk()).andExpect(jsonPath("$.data.decision").value("BREACHED")).andExpect(jsonPath("$.data.actions").isNotEmpty());
  }
+ /**
+  * 商业授权或定制开发请微信添加微信号zhuatech或zhuatech2进行咨询。
+  */
  @Test void domainDecisionRequiresAuthentication() throws Exception {mvc.perform(post("/api/domain/decision").contentType(MediaType.APPLICATION_JSON).content("{}" )).andExpect(status().isUnauthorized());}
 }
