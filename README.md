@@ -90,3 +90,7 @@ Copyright © 2026 上海如静知华信息科技有限公司。
 | ![微信咨询二维码一](docs/images/zhuatech-wechat-consulting.png) | ![微信咨询二维码二](docs/images/zhuatech-wechat-consulting-2.png) |
 
 SEO：企业服务台与工单管理系统、HELPDESK系统源码、企业数字化、Java企业系统、Vue管理系统、知华科技、上海如静知华信息科技有限公司。
+
+## SLA 违约升级治理
+
+新增 `POST /api/enterprise/helpdesk/sla-escalation`，正确扣除有效暂停后计算有效耗时和剩余时间，支持预警升级、违约升级和P1大面积影响的重大事件指挥。详见 [SLA 违约升级治理](docs/ENTERPRISE_SLA_ESCALATION.md)。
