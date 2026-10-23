@@ -1,0 +1,95 @@
+{
+  "slug": "helpdesk",
+  "title": "服务工单时效与解决状态预检",
+  "fields": [
+    {
+      "key": "ticket_no",
+      "label": "工单编号",
+      "type": "ID",
+      "length": 200
+    },
+    {
+      "key": "status",
+      "label": "状态",
+      "type": "ENUM",
+      "length": 200,
+      "options": [
+        "OPEN",
+        "RESOLVED",
+        "CLOSED"
+      ]
+    },
+    {
+      "key": "resolution",
+      "label": "解决结论",
+      "type": "ENUM",
+      "length": 200,
+      "options": [
+        "PENDING",
+        "DONE"
+      ]
+    },
+    {
+      "key": "elapsed_minutes",
+      "label": "耗时分钟",
+      "type": "INTEGER",
+      "length": 200,
+      "scale": 0
+    },
+    {
+      "key": "sla_minutes",
+      "label": "SLA分钟",
+      "type": "INTEGER",
+      "length": 200,
+      "scale": 0,
+      "min": "1"
+    },
+    {
+      "key": "owner",
+      "label": "责任人",
+      "type": "ID",
+      "length": 200
+    }
+  ],
+  "unique": [
+    [
+      "ticket_no"
+    ]
+  ],
+  "rules": [
+    {
+      "op": "IF_EQ",
+      "args": [
+        "status",
+        "CLOSED",
+        "resolution",
+        "DONE"
+      ],
+      "code": "TICKET_RESOLUTION",
+      "message": "关闭工单前需有解决结论",
+      "bad": {
+        "resolution": "PENDING"
+      }
+    },
+    {
+      "op": "LE",
+      "args": [
+        "elapsed_minutes",
+        "sla_minutes"
+      ],
+      "code": "SLA_EXCEEDED",
+      "message": "工单耗时超过输入SLA",
+      "bad": {
+        "elapsed_minutes": "121"
+      }
+    }
+  ],
+  "sampleCsv": "ticket_no,status,resolution,elapsed_minutes,sla_minutes,owner\nHD-001,CLOSED,DONE,60,120,SUPPORT-01\n",
+  "limits": {
+    "rows": 500,
+    "bytes": 262144,
+    "columns": 32,
+    "cellCharacters": 4000
+  },
+  "scope": "Read-only batch validation; no persistence, reference-master lookup or full production certification."
+}
