@@ -1,0 +1,46 @@
+[
+  {
+    "patch": {},
+    "expected": {
+      "decision": "REVIEW",
+      "netFirstContactResolved": "#70",
+      "effectiveFirstContactPct": "#70"
+    },
+    "error": false
+  },
+  {
+    "patch": {
+      "reopenedFirstContact": "5"
+    },
+    "expected": {
+      "decision": "PASS",
+      "effectiveFirstContactPct": "#75"
+    },
+    "error": false
+  },
+  {
+    "patch": {
+      "reopenedFirstContact": "81"
+    },
+    "expected": {},
+    "error": true
+  },
+  {
+    "patch": {
+      "firstContactResolved": "101"
+    },
+    "expected": {},
+    "error": true
+  },
+  {
+    "patch": {
+      "resolvedTickets": "0",
+      "firstContactResolved": "0",
+      "reopenedFirstContact": "0"
+    },
+    "expected": {
+      "decision": "REVIEW"
+    },
+    "error": false
+  }
+]

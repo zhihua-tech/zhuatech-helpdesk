@@ -1,0 +1,75 @@
+{
+  "slug": "helpdesk",
+  "title": "一次解决口径与重开工单净覆盖",
+  "fields": [
+    {
+      "key": "id",
+      "label": "记录编号",
+      "type": "ID"
+    },
+    {
+      "key": "resolvedTickets",
+      "label": "已解决工单数",
+      "type": "NUMBER",
+      "scale": 0,
+      "min": "0",
+      "max": "1000000"
+    },
+    {
+      "key": "firstContactResolved",
+      "label": "首触解决且未升级数",
+      "type": "NUMBER",
+      "scale": 0,
+      "min": "0",
+      "max": "1000000"
+    },
+    {
+      "key": "reopenedFirstContact",
+      "label": "其中已重开数",
+      "type": "NUMBER",
+      "scale": 0,
+      "min": "0",
+      "max": "1000000"
+    },
+    {
+      "key": "targetPct",
+      "label": "一次解决目标%",
+      "type": "NUMBER",
+      "scale": 4,
+      "min": "0",
+      "max": "100"
+    }
+  ],
+  "columns": [
+    {
+      "key": "netFirstContactResolved",
+      "label": "扣重开后首触解决数"
+    },
+    {
+      "key": "effectiveFirstContactPct",
+      "label": "有效一次解决率%"
+    },
+    {
+      "key": "reopenedPct",
+      "label": "首触解决后重开率%"
+    }
+  ],
+  "description": "在同一观察窗口中核对已解决、无需升级和已重开数量，计算排除重开的一次解决占比，避免重开仍计成功。",
+  "owner": "上海如静知华信息科技有限公司",
+  "website": "https://www.zhuatech.cn/",
+  "authorization": "商业授权或定制开发请微信添加微信号zhuatech或zhuatech2进行咨询。",
+  "version": 1,
+  "notes": "输入均须为已获授权的同口径数据。金额固定人民币元；比例为百分数。核算结果只用于复核，未审批、未写库、未发起外部调用，也未触发付款、签名、资料销毁或设备控制。建议不构成法律、安全、会计或碳核证结论。",
+  "sample": {
+    "asOf": "2026-10-23",
+    "records": [
+      {
+        "id": "ITEM-001",
+        "resolvedTickets": "100",
+        "firstContactResolved": "80",
+        "reopenedFirstContact": "10",
+        "targetPct": "75"
+      }
+    ]
+  }
+}
